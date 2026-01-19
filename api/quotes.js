@@ -3,6 +3,10 @@ import rawQuotes from '../quotes.json';
 export default function handler(req, res) {
   const { key, listAuthors } = req.query;
 
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
   // Map JSON agar hanya kolom yang penting
   const quotes = rawQuotes.map(q => ({
     key: q.key_quote,
