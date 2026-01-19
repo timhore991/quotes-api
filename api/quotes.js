@@ -1,29 +1,40 @@
 import rawQuotes from '../quotes.json';
 
 export default function handler(req, res) {
-  // Map JSON supaya output bersih: hanya quote, author, key_quote
+  const { key, listAuthors } = req.query;
+
+  // Map JSON agar hanya kolom yang penting
   const quotes = rawQuotes.map(q => ({
-    key: q.key_quote,  // jadikan key utama
+    key: q.key_quote,
     quote: q.quote,
     author: q.author
   }));
 
-  const { key } = req.query;
+  // Jika query ?listAuthors=true
+  if (listAuthors === 'true') {
+    // Buat set unik author per key
+    const authors = {};
+    quotes.forEach(q => {
+      if (!authors[q.key]) {
+        authors[q.key] = [];
+      }
+      if (!authors[q.key].includes(q.author)) {
+        authors[q.key].push(q.author);
+      }
+    });
+    return res.json(authors);
+  }
 
+  // Jika query ?key=xxxx
   if (key) {
-    // Cari quote sesuai key_quote
     const filtered = quotes.filter(q => q.key === key);
-
     if (filtered.length === 0) {
       return res.status(404).json({ error: 'Quote not found' });
     }
-
-    // Jika ada lebih dari 1 quote untuk key yang sama, ambil random
-    const random = filtered[Math.floor(Math.random() * filtered.length)];
-    return res.json(random);
+    return res.json(filtered); // kembalikan semua data terkait key
   }
 
-  // Jika tidak ada key, ambil random dari semua quotes
+  // Jika tidak ada key → random quote
   const random = quotes[Math.floor(Math.random() * quotes.length)];
   res.json(random);
 }
