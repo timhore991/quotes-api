@@ -2,32 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Quotes API Demo</title>
+  <title>Quotes API Demo & Docs</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
+    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
     .quote { margin: 10px 0; padding: 10px; border-left: 3px solid #333; }
     input, button { margin: 5px 0; padding: 5px; }
+    pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
+    hr { margin: 20px 0; }
   </style>
 </head>
 <body>
-  <h1>Quotes API Demo</h1>
+  <h1>Quotes API Demo & Docs</h1>
 
-  <!-- Random quote -->
+  <h2>1. Random Quote</h2>
+  <p>Full API URL: <code>https://quotes-api-991.vercel.app/api/quotes</code></p>
   <button id="randomBtn">Ambil Random Quote</button>
   <div id="randomQuote" class="quote"></div>
 
+  <h3>Contoh response:</h3>
+  <pre>
+{
+  "key": "pramoedya_ananta_toer",
+  "quote": "Kemudian malam melanjutkan tugasnya: kosong dari segala perasaan.",
+  "author": "Pramoedya Ananta Toer"
+}
+  </pre>
+
   <hr>
 
-  <!-- Filter by key -->
+  <h2>2. Quote by Key</h2>
+  <p>Full API URL: <code>https://quotes-api-991.vercel.app/api/quotes?key=key_quote</code></p>
   <input type="text" id="keyInput" placeholder="Masukkan key_quote">
   <button id="keyBtn">Cari Quote by Key</button>
   <div id="keyResult"></div>
 
+  <h3>Contoh response:</h3>
+  <pre>
+[
+  {
+    "key": "pramoedya_ananta_toer",
+    "quote": "Masa terbaik dalam hidup seseorang adalah masa ia dapat menggunakan kebebasan yang telah direbutnya sendiri.",
+    "author": "Pramoedya Ananta Toer"
+  },
+  {
+    "key": "pramoedya_ananta_toer",
+    "quote": "Kesalahan orang-orang pandai ialah menganggap yang lain bodoh...",
+    "author": "Pramoedya Ananta Toer"
+  }
+]
+  </pre>
+
   <hr>
 
-  <!-- List authors -->
+  <h2>3. List Authors</h2>
+  <p>Full API URL: <code>https://quotes-api-991.vercel.app/api/quotes?listAuthors=true</code></p>
   <button id="authorsBtn">Tampilkan List Author</button>
   <div id="authorsResult"></div>
+
+  <h3>Contoh response:</h3>
+  <pre>
+{
+  "pramoedya_ananta_toer": ["Pramoedya Ananta Toer"],
+  "another_key": ["Author Name"]
+}
+  </pre>
 
   <script>
     const API_URL = "https://quotes-api-991.vercel.app/api/quotes";
