@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Quotes API</title>
+  <meta charset="UTF-8">
+  <title>Quotes API Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .quote { margin: 10px 0; padding: 10px; border-left: 3px solid #333; }
+    input, button { margin: 5px 0; padding: 5px; }
+  </style>
 </head>
 <body>
-  <h1>Quotes API</h1>
-  <p>Gunakan endpoint <code>/api/quotes</code> untuk mendapatkan quote.</p>
+  <h1>Quotes API Demo</h1>
+
+  <!-- Random quote -->
+  <button id="randomBtn">Ambil Random Quote</button>
+  <div id="randomQuote" class="quote"></div>
+
+  <hr>
+
+  <!-- Filter by key -->
+  <input type="text" id="keyInput" placeholder="Masukkan key_quote">
+  <button id="keyBtn">Cari Quote by Key</button>
+  <div id="keyResult"></div>
+
+  <hr>
+
+  <!-- List authors -->
+  <button id="authorsBtn">Tampilkan List Author</button>
+  <div id="authorsResult"></div>
+
+  <script>
+    const API_URL = "https://quotes-api-991.vercel.app/api/quotes";
+
+    // Random quote
+    document.getElementById("randomBtn").onclick = async () => {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      document.getElementById("randomQuote").innerHTML = `<strong>${data.author}</strong>: ${data.quote}`;
+    };
+
+    // Filter by key
+    document.getElementById("keyBtn").onclick = async () => {
+      const key = document.getElementById("keyInput").value.trim();
+      if (!key) return alert("Masukkan key_quote!");
+      const res = await fetch(`${API_URL}?key=${encodeURIComponent(key)}`);
+      if (!res.ok) {
+        document.getElementById("keyResult").innerHTML = "Quote tidak ditemukan!";
+        return;
+      }
+      const data = await res.json();
+      let html = "";
+      data.forEach(q => {
+        html += `<div class="quote"><strong>${q.author}</strong>: ${q.quote}</div>`;
+      });
+      document.getElementById("keyResult").innerHTML = html;
+    };
+
+    // List authors
+    document.getElementById("authorsBtn").onclick = async () => {
+      const res = await fetch(`${API_URL}?listAuthors=true`);
+      const data = await res.json();
+      let html = "";
+      for (const key in data) {
+        html += `<div><strong>${key}</strong>: ${data[key].join(", ")}</div>`;
+      }
+      document.getElementById("authorsResult").innerHTML = html;
+    };
+  </script>
 </body>
 </html>
